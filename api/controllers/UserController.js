@@ -55,7 +55,7 @@ const UserController = () => {
     }
   };
 
-  const getAll = async (req, res, next) => {
+  const getAllUser = async (req, res, next) => {
     if (!req.user.isAdmin) {
       return res.json(sendResponse(httpStatus.UNAUTHORIZED, 'Unauthorized', false, 'Unauthorized'));
     }
@@ -71,7 +71,7 @@ const UserController = () => {
   return {
     signup,
     login,
-    getAll,
+    getAllUser,
     load
   };
 };

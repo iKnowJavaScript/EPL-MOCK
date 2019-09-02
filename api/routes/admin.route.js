@@ -28,6 +28,6 @@ router.use(adminAuth);
 router
   .route('/')
   /** GET /api/v1/users - get all users */
-  .get(userCtrl.getAll);
+  .get(userCtrl.getAllUser);
 
 module.exports = router;
