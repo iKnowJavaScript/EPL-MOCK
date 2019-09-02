@@ -1,0 +1,22 @@
+{
+  "name": "sterling-premier-league-mock",
+  "version": "1.0.0",
+  "description": " An API that serves the latest scores of fixtures of matches in a “Mock Premier League”",
+  "main": "index.js",
+  "engines": {
+    "node": ">=8.10.0",
+    "npm": ">=5.6.0",
+    "yarn": ">=1.13.0"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "start:dev": "nodemon index.js",
+    "start:debug": "cross-env DEBUG=express-mongoose-es6-rest-api:* yarn start",
+    "test": "cross-env NODE_ENV=test && jest --runInBand --verbose --detectOpenHandles --forceExit",
+    "test:watch": "yarn test -- --watch",
+    "test:coverage": "yarn test --coverage"
+  },
+  "repository": "https://github.com/iKnowJavaScript/sterling-premier-league-mock.git",
+  "author": "iKnowJavaScript <remymartins0398@yahoo.com>",
+  "license": "MIT"
+}
