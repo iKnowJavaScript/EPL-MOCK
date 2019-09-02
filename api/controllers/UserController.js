@@ -1,39 +1,26 @@
 require('dotenv').config();
 const httpStatus = require('http-status');
-const { UserQuery } = require('../models');
+const User = require('../models/User.model');
 const sendResponse = require('../helpers/response');
-const bcryptService = require('../services/bcrypt.service');
-const authService = require('../services/auth.service');
 
 const UserController = () => {
   const load = async (req, res, next, id) => {
     try {
-      let user = await User.get(id);
-      if (user && !user.deleted && user.isVerified) {
+      let user = await User.getOne({ _id: id });
+      if (user) {
         req.user = user;
         return next();
       }
-      return res.json(sendResponse(httpStatus.NOT_FOUND, 'No such user exists!', null, null));
     } catch (error) {
       next(error);
     }
   };
+
   const signup = async (req, res, next) => {
     try {
-      const { name, email, phone, password, password2, user_type } = req.body;
+      const { email } = req.body;
 
-      if (password !== password2) {
-        return res.json(
-          sendResponse(
-            httpStatus.BAD_REQUEST,
-            'Passwords does not match',
-            {},
-            { password: 'password does not match' }
-          )
-        );
-      }
-
-      const userExist = await UserQuery.getOne({ email });
+      const userExist = await User.getOne({ email: email });
 
       if (userExist) {
         return res.json(
@@ -45,14 +32,11 @@ const UserController = () => {
           )
         );
       }
-      const user = await UserQuery.create({
-        name,
-        email,
-        phone,
-        password,
-        user_type
-      });
-      return res.json(sendResponse(httpStatus.OK, 'success', user, null));
+
+      const user = await User.create(req.body);
+      const token = user.token();
+
+      return res.json(sendResponse(httpStatus.OK, 'success', user.transform(), null, token));
     } catch (err) {
       next(err);
     }
@@ -60,47 +44,24 @@ const UserController = () => {
 
   const login = async (req, res, next) => {
     try {
-      const { email, password } = req.body;
+      const { user, accessToken } = await User.loginAndGenerateToken(req.body);
 
-      const userExist = await UserQuery.getOne({ email });
-
-      if (!userExist) {
-        return res.json(
-          sendResponse(
-            httpStatus.NOT_FOUND,
-            'User does not exist',
-            {},
-            { error: 'User does not exist' }
-          )
-        );
-      }
-
-      const correctPassword = await bcryptService().comparePassword(password, userExist.password);
-
-      if (!correctPassword) {
-        return res.json(
-          sendResponse(
-            httpStatus.BAD_REQUEST,
-            'invalid email or password',
-            {},
-            { error: 'invalid email or password' }
-          )
-        );
-      }
-
-      // to issue token with the user object, convert it to JSON
-      const token = authService().issue(userExist.toJSON());
-
-      return res.json(sendResponse(httpStatus.OK, 'success', userExist, null, token));
-    } catch (err) {
-      next(err);
+      return res.json(
+        sendResponse(200, 'Successfully logged in', user.transform(), false, accessToken)
+      );
+    } catch (error) {
+      console.log(error);
+      next(error);
     }
   };
 
   const getAll = async (req, res, next) => {
+    if (!req.user.isAdmin) {
+      return res.json(sendResponse(httpStatus.UNAUTHORIZED, 'Unauthorized', false, 'Unauthorized'));
+    }
     try {
       const query = req.body;
-      const users = await UserQuery.getAll(query);
+      const users = await User.getAll(query);
       return res.json(sendResponse(httpStatus.OK, 'success', users, null));
     } catch (err) {
       next(err);
