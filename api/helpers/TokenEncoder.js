@@ -3,7 +3,7 @@ const jwt = require('jwt-simple');
 
 const { jwtExpirationInterval, jwtSecret } = require('../../config/env');
 
-const EncodeToken = (email, id, isAdmin, isMentor) => {
+const EncodeToken = (email, id, isAdmin) => {
   const payload = {
     exp: moment()
       .add(jwtExpirationInterval, 'days')
@@ -11,8 +11,7 @@ const EncodeToken = (email, id, isAdmin, isMentor) => {
     iat: moment().unix(),
     sub: id,
     email,
-    isAdmin,
-    isMentor
+    isAdmin
   };
   return jwt.encode(payload, jwtSecret);
 };
