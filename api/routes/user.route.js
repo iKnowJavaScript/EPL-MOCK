@@ -15,6 +15,8 @@ router
   /** POST /api/v1/user - creae a user */
   .post(validate(paramValidation.createUser, { abortEarly: false }), userCtrl.signup);
 
+router.post('/login', validate(paramValidation.login, { abortEarly: false }), userCtrl.login);
+
 router.use(decode);
 
 router.route('/:userId');
