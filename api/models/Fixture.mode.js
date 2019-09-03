@@ -94,4 +94,4 @@ FixtureSchema.statics = {
   }
 };
 
-module.exports = mongoose.model('team', FixtureSchema);
+module.exports = mongoose.model('fixture', FixtureSchema);
