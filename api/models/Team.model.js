@@ -57,12 +57,6 @@ TeamSchema.methods = {
     for (key in obj) {
       this[key] = obj[key];
     }
-    return this;
-  },
-  async update(obj) {
-    for (key in obj) {
-      this[key] = obj[key];
-    }
     await this.save();
     return this;
   }
