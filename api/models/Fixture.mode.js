@@ -21,13 +21,18 @@ const FixtureSchema = new mongoose.Schema({
     default: 'Pending'
   },
 
+  stadium: {
+    type: String,
+    required: true
+  },
+
   home_team: {
     type: mongoose.Types.ObjectId,
-    ref: 'Team'
+    ref: 'team'
   },
   away_team: {
     type: mongoose.Types.ObjectId,
-    ref: 'Team'
+    ref: 'team'
   },
   result: {
     type: String,
