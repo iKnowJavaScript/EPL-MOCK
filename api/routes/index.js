@@ -1,8 +1,7 @@
 const express = require('express');
-const httpStatus = require('http-status');
 const userRoutes = require('./user.route');
-const sendResponse = require('../helpers/response');
 const adminRoutes = require('./admin.route');
+const teamRoutes = require('./team.route');
 
 const router = express.Router(); // eslint-disable-line new-cap
 
@@ -14,7 +13,10 @@ router.get('/health-check', (req, res) => res.send('OK'));
 // mount user routes at /users
 router.use('/user', userRoutes);
 
-//mount admin routes at /admin
+// mount admin routes at /admin
 router.use('/admin', adminRoutes);
+
+// mount team routes at /team
+router.use('/team', teamRoutes);
 
 module.exports = router;
