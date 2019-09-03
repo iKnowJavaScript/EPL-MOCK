@@ -15,7 +15,8 @@ module.exports = {
         .min(6)
         .max(20)
         .required(),
-      isAdmin: Joi.boolean()
+      isAdmin: Joi.boolean(),
+      favoriteTeam: string()
     }
   },
   login: {
