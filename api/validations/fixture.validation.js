@@ -17,7 +17,7 @@ module.exports = {
       isDeleted: Joi.boolean()
     }
   },
-  editTeam: {
+  editFixture: {
     body: {
       date: Joi.date(),
       time: Joi.string(),
