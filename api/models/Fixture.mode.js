@@ -1,8 +1,9 @@
-const mongoose = require('mongoose');
-const httpStatus = require('http-status');
-const APIError = require('../helpers/APIError');
-const { generateLink } = require('../services/crypto.service');
 const immutablePlugin = require('mongoose-immutable');
+const httpStatus = require('http-status');
+const mongoose = require('mongoose');
+const APIError = require('../helpers/APIError');
+const formatQuery = require('../helpers/formatQuery');
+const { generateLink } = require('../services/crypto.service');
 
 const FixtureSchema = new mongoose.Schema({
   date: {
@@ -18,7 +19,8 @@ const FixtureSchema = new mongoose.Schema({
   status: {
     type: String,
     enum: ['Pending', 'Completed'],
-    default: 'Pending'
+    default: 'Pending',
+    index: true
   },
 
   stadium: {
@@ -28,11 +30,13 @@ const FixtureSchema = new mongoose.Schema({
 
   home_team: {
     type: mongoose.Types.ObjectId,
-    ref: 'team'
+    ref: 'team',
+    index: true
   },
   away_team: {
     type: mongoose.Types.ObjectId,
-    ref: 'team'
+    ref: 'team',
+    index: true
   },
   result: {
     type: String,
@@ -95,6 +99,38 @@ FixtureSchema.statics = {
         message: error.message,
         status: httpStatus.BAD_REQUEST
       });
+    }
+  },
+
+  async search(query) {
+    try {
+      const formatedString = formatQuery(query);
+      const searchQueries = formatedString.split(' ');
+      let search = [];
+      let fixtures = [];
+      for (let i = 0, length = searchQueries.length; i < length; i++) {
+        if (!searchQueries[i]) continue;
+        const pattern = new RegExp(searchQueries[i], 'gi');
+        let query = [
+          { date: { $regex: pattern } },
+          { time: { $regex: pattern } },
+          { status: { $regex: pattern } },
+          { home_team: { $regex: pattern } },
+          { away_team: { $regex: pattern } }
+        ];
+        search = search.concat(query);
+      }
+      if (search.length) {
+        fixtures = await this.find({
+          $or: search
+        })
+          .populate({ path: 'home_team', select: 'name coach stadium' })
+          .populate({ path: 'away_team', select: 'name coach' })
+          .exec();
+      }
+      return fixtures;
+    } catch (error) {
+      throw new APIError(error);
     }
   }
 };

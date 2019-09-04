@@ -72,13 +72,44 @@ const TeamController = () => {
     }
   };
 
+  const searchFixture = async (req, res, next) => {
+    try {
+      const results = await Fixture.search(req.query.search);
+
+      return res.json(sendResponse(httpStatus.OK, 'Fixtures found', results));
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  const getPendingFixtures = async (req, res, next) => {
+    try {
+      const results = await Fixture.getBy({ status: 'Pending' });
+      return res.json(sendResponse(httpStatus.OK, 'Fixtures found', results));
+    } catch (error) {
+      next(error);
+    }
+  };
+
+  const getCompletedFixtures = async (req, res, next) => {
+    try {
+      const results = await Fixture.getBy({ status: 'Completed' });
+      return res.json(sendResponse(httpStatus.OK, 'Fixtures found', results));
+    } catch (error) {
+      next(error);
+    }
+  };
+
   return {
     load,
     create,
-    editFixture,
-    deleteFixture,
     getFixture,
-    getFixtures
+    editFixture,
+    getFixtures,
+    searchFixture,
+    deleteFixture,
+    getPendingFixtures,
+    getCompletedFixtures
   };
 };
 

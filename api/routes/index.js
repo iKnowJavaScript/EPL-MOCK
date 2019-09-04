@@ -1,9 +1,10 @@
 const express = require('express');
 const userRoutes = require('./user.route');
-const adminRoutes = require('./admin.route');
 const teamRoutes = require('./team.route');
-const fixtureRoutes = require('./fixture.route');
 const authRoutes = require('./auth.route');
+const adminRoutes = require('./admin.route');
+const searchRoutes = require('./search.route');
+const fixtureRoutes = require('./fixture.route');
 
 const router = express.Router(); // eslint-disable-line new-cap
 
@@ -26,5 +27,8 @@ router.use('/team', teamRoutes);
 
 // mount fixture routes at /fixture
 router.use('/fixture', fixtureRoutes);
+
+// mount search routes at /search
+router.use('/search', searchRoutes);
 
 module.exports = router;
