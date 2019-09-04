@@ -30,6 +30,10 @@ const UserSchema = new mongoose.Schema(
       type: String,
       required: true
     },
+    favoriteTeam: {
+      type: String,
+      default: ''
+    },
     isAdmin: {
       type: Boolean,
       default: false

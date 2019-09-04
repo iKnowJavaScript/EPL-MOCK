@@ -16,7 +16,7 @@ router.use(decode);
 router.route('/').get(teamCtrl.getTeams);
 
 // Get a single team
-router.route('/:id/').get(teamCtrl.getTeam);
+router.route('/:id').get(teamCtrl.getTeam);
 
 // only admin can acces these route
 router.use(adminAuth);

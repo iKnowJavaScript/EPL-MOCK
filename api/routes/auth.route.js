@@ -2,19 +2,18 @@ const express = require('express');
 const { celebrate: validate, errors } = require('celebrate');
 const paramValidation = require('../validations/user.validation');
 const userCtrl = require('../controllers/UserController');
-const decode = require('../middlewares/decode');
 //const { profileImage } = require('../helpers/upload');
 const router = express.Router(); // eslint-disable-line new-cap
 
-/** Load user when API with userId route parameter is hit */
-router.param('userId', userCtrl.load);
+/** POST /api/v1/user - creae a user */
+router
+  .route('/register')
+  .post(validate(paramValidation.createUser, { abortEarly: false }), userCtrl.signup);
 
-
+// login a user
 router.post('/login', validate(paramValidation.login, { abortEarly: false }), userCtrl.login);
 
-router.use(decode);
-
-router.route('/:userId');
-/** GET /api/v1/user/userId gets a user by id */
+// admin login
+router.post('/admin/login', validate(paramValidation.login, { abortEarly: false }), userCtrl.login);
 
 module.exports = router;

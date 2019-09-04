@@ -12,7 +12,7 @@
     "start": "node index.js",
     "start:dev": "nodemon index.js",
     "start:debug": "cross-env DEBUG=express-mongoose-es6-rest-api:* yarn start",
-    "test": "cross-env NODE_ENV=test && jest --runInBand --verbose --detectOpenHandles --forceExit",
+    "test": "cross-env NODE_ENV=test && jest --runInBand --verbose  ",
     "test:watch": "yarn test -- --watch",
     "test:coverage": "yarn test --coverage"
   },
