@@ -16,7 +16,7 @@ module.exports = {
         .max(20)
         .required(),
       isAdmin: Joi.boolean(),
-      favoriteTeam: string()
+      favoriteTeam: Joi.string()
     }
   },
   login: {
