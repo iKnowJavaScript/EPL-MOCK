@@ -20,8 +20,6 @@ router
     // adminCtrl.createAdmin
   );
 
-router.post('/admin-login', validate(paramValidation.login, { abortEarly: false }), userCtrl.login);
-
 router.use(decode);
 router.use(adminAuth);
 
