@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const httpStatus = require('http-status');
 const APIError = require('../helpers/APIError');
+const formatQuery = require('../helpers/formatQuery');
 
 const TeamSchema = new mongoose.Schema({
   name: {
@@ -10,7 +11,8 @@ const TeamSchema = new mongoose.Schema({
     uppercase: true,
     minlength: 2,
     maxlength: 150,
-    required: true
+    required: true,
+    index: true
   },
   coach: {
     type: String,
@@ -73,6 +75,7 @@ TeamSchema.statics = {
       });
     }
   },
+
   async getBy(option) {
     try {
       const res = await this.find(option).exec();
@@ -82,6 +85,33 @@ TeamSchema.statics = {
         message: error.message,
         status: httpStatus.BAD_REQUEST
       });
+    }
+  },
+
+  async search(query) {
+    try {
+      const formatedString = formatQuery(query);
+      const searchQueries = formatedString.split(' ');
+      let search = [];
+      let teams = [];
+      for (let i = 0, length = searchQueries.length; i < length; i++) {
+        if (!searchQueries[i]) continue;
+        const pattern = new RegExp(searchQueries[i], 'gi');
+        let query = [
+          { name: { $regex: pattern } },
+          { coach: { $regex: pattern } },
+          { stadium: { $regex: pattern } }
+        ];
+        search = search.concat(query);
+      }
+      if (search.length) {
+        teams = await this.find({
+          $or: search
+        });
+      }
+      return teams;
+    } catch (error) {
+      throw new APIError(error);
     }
   }
 };
