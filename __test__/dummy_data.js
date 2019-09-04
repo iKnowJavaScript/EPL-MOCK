@@ -42,3 +42,14 @@ exports.teams = {
     founded: '1896'
   }
 };
+
+exports.makeFixture = function(home, away) {
+  return {
+    date: new Date().toLocaleDateString(),
+    time: new Date().toLocaleTimeString(),
+    home_team: home._id,
+    away_team: away._id,
+    stadium: 'San SIro',
+    status: 'Pending'
+  };
+};
