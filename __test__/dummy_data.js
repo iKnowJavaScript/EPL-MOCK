@@ -16,5 +16,29 @@ exports.users = {
     email: 'cyahoo.com',
     password: '22222222',
     favoriteTeam: 'Chelsea'
+  },
+  admin: {
+    name: 'Admin One',
+    email: 'admin01@yahoo.com',
+    password: '22222222',
+    favoriteTeam: 'Arsenal',
+    isAdmin: true
+  }
+};
+
+exports.teams = {
+  team1: {
+    name: 'Arsenal',
+    coach: 'Unai Emery',
+    stadium: 'Emirate Stadium',
+    owner: 'Alisher Usmanov',
+    founded: '1886'
+  },
+  team2: {
+    name: 'Chelsea',
+    coach: 'Frank Lampard',
+    stadium: 'Stanford Bridge',
+    owner: 'Roman Abramovic',
+    founded: '1896'
   }
 };
