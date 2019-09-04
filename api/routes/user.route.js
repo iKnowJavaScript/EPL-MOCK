@@ -9,11 +9,6 @@ const router = express.Router(); // eslint-disable-line new-cap
 /** Load user when API with userId route parameter is hit */
 router.param('userId', userCtrl.load);
 
-router
-  .route('/')
-
-  /** POST /api/v1/user - creae a user */
-  .post(validate(paramValidation.createUser, { abortEarly: false }), userCtrl.signup);
 
 router.post('/login', validate(paramValidation.login, { abortEarly: false }), userCtrl.login);
 
