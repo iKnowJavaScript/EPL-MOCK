@@ -5,6 +5,7 @@ const User = require('../api/models/User.model');
 let { user1, user2, fakeUser } = require('./dummy_data').users;
 
 let user;
+let registeredUser;
 
 beforeEach(async () => {
   await User.deleteMany().exec();
@@ -40,10 +41,10 @@ describe('Checking basic routes', () => {
 });
 
 describe('Testing User routes', () => {
-  describe('Testing the post route', () => {
+  describe('Testing the POST route, Creating user', () => {
     it('Should be able to add new user', async () => {
       const response = await request(app)
-        .post('/api/v1/user')
+        .post('/api/v1/auth/register')
         .send(user1)
         .expect(200);
       expect(response.body.payload).toMatchObject({
@@ -59,7 +60,7 @@ describe('Testing User routes', () => {
     });
     it('Shoud return a validation error if user details is not correct', async () => {
       const response = await request(app)
-        .post('/api/v1/user')
+        .post('/api/v1/auth/register')
         .send(fakeUser)
         .expect(200);
       const { statusCode, message, errors } = response.body;
@@ -69,7 +70,7 @@ describe('Testing User routes', () => {
     });
     it('Should not be able to add user with thesame email address', async () => {
       const response = await request(app)
-        .post('/api/v1/user')
+        .post('/api/v1/auth/register')
         .send({
           name: 'anotherVictor',
           email: 'firstUser@yahoo.com',
@@ -82,5 +83,31 @@ describe('Testing User routes', () => {
       expect(error).toBeDefined();
     });
   });
-  describe("Testing Get request")
+  describe('Registered user should be able to sig in', () => {
+    it('Registered user should be able to log in', async () => {
+      const register = await request(app)
+        .post('/api/v1/auth/register')
+        .send(user2);
+      registeredUser = register.body;
+
+      const { email } = registeredUser.payload;
+
+      const response = await request(app)
+        .post('/api/v1/auth/login')
+        .send({ email, password: user2.password })
+        .expect(200);
+      const { payload, message, token, statusCode, error } = response.body;
+      expect(payload).toMatchObject({
+        id: expect.any(String),
+        name: expect.any(String),
+        email: expect.any(String),
+        isAdmin: expect.any(Boolean),
+        isDeleted: expect.any(Boolean)
+      });
+      expect(statusCode).toBe(200);
+      expect(message).toBeDefined();
+      expect(error).toBe(false);
+      expect(token).toBeDefined();
+    });
+  });
 });
