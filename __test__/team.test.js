@@ -60,7 +60,7 @@ describe('Testing Team Route', () => {
       expect(error).toBeFalsy();
     });
   });
-  describe('Testing "GET" request to team route', () => {
+  describe('Testing "GET"/ Seacrh request to team route', () => {
     it('User should be able get a all teams from the database', async () => {
       const response = await request(app)
         .get('/api/v1/team')
@@ -80,6 +80,18 @@ describe('Testing Team Route', () => {
       const { statusCode, message, payload, error } = response.body;
       expect(statusCode).toBe(200);
       expect(message).toMatch(/Success/i);
+      expect(payload).toBeDefined();
+      expect(error).toBeFalsy();
+    });
+    it('User should be able search for team using either name or stadium or coach', async () => {
+      const response = await request(app)
+        .get(`/api/v1/search/team`)
+        .set('Authorization', `Bearer ${registeredUser.token}`)
+        .query('name=Arsenal')
+        .expect(200);
+      const { statusCode, message, payload, error } = response.body;
+      expect(statusCode).toBe(200);
+      expect(message).toMatch(/found/i);
       expect(payload).toBeDefined();
       expect(error).toBeFalsy();
     });

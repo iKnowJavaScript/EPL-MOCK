@@ -1,6 +1,6 @@
 require('dotenv').config();
 const httpStatus = require('http-status');
-const Fixture = require('../models/Fixture.mode');
+const Fixture = require('../models/Fixture.model');
 const sendResponse = require('../helpers/response');
 
 const TeamController = () => {
@@ -73,8 +73,11 @@ const TeamController = () => {
   };
 
   const searchFixture = async (req, res, next) => {
+    let query = Object.values(req.query)[0];
+    if (!query) return res.json(sendResponse(httpStatus.OK, 'Fixture found', []));
+
     try {
-      const results = await Fixture.search(req.query.search);
+      const results = await Fixture.search(query);
 
       return res.json(sendResponse(httpStatus.OK, 'Fixtures found', results));
     } catch (error) {
