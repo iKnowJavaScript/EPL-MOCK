@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const app = require('../index');
 const User = require('../api/models/User.model');
 const Team = require('../api/models/Team.model');
-const Fixture = require('../api/models/Fixture.mode');
+const Fixture = require('../api/models/Fixture.model');
 let { user1, admin } = require('./dummy_data').users;
 let { team1, team2 } = require('./dummy_data').teams;
 let { makeFixture } = require('./dummy_data');
@@ -84,7 +84,9 @@ describe('Testing Team Route', () => {
         time: expect.any(String),
         home_team: expect.any(String),
         away_team: expect.any(String),
-        status: expect.any(String)
+        status: expect.any(String),
+        home: expect.any(String),
+        away: expect.any(String)
       });
       expect(error).toBeFalsy();
     });
@@ -114,8 +116,22 @@ describe('Testing Team Route', () => {
         time: expect.any(String),
         home_team: expect.any(Object),
         away_team: expect.any(Object),
-        status: expect.any(String)
+        status: expect.any(String),
+        home: expect.any(String),
+        away: expect.any(String)
       });
+      expect(error).toBeFalsy();
+    });
+    it('User should be able search for fixture using either name or pending/completed/date/stadium or coach', async () => {
+      const response = await request(app)
+        .get(`/api/v1/search/fixture`)
+        .set('Authorization', `Bearer ${registeredUser.token}`)
+        .query('team=Arsenal')
+        .expect(200);
+      const { statusCode, message, payload, error } = response.body;
+      expect(statusCode).toBe(200);
+      expect(message).toMatch(/found/i);
+      expect(payload).toBeDefined();
       expect(error).toBeFalsy();
     });
   });
@@ -146,7 +162,9 @@ describe('Testing Team Route', () => {
         home_team: expect.any(Object),
         away_team: expect.any(Object),
         status: expect.any(String),
-        stadium: expect.any(String)
+        stadium: expect.any(String),
+        home: expect.any(String),
+        away: expect.any(String)
       });
       expect(error).toBeFalsy();
     });

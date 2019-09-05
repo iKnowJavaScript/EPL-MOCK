@@ -14,7 +14,9 @@ module.exports = {
       stadium: Joi.string().required(),
       status: Joi.string(),
       result: Joi.string(),
-      isDeleted: Joi.boolean()
+      isDeleted: Joi.boolean(),
+      home: Joi.string().required(),
+      away: Joi.string().required()
     }
   },
   editFixture: {
@@ -26,7 +28,9 @@ module.exports = {
       stadium: Joi.string(),
       status: Joi.string(),
       result: Joi.string(),
-      isDeleted: Joi.boolean()
+      isDeleted: Joi.boolean(),
+      home: Joi.string(),
+      away: Joi.string()
     },
     params: {
       id: Joi.string().hex()

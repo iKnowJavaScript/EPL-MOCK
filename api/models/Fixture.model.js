@@ -25,9 +25,19 @@ const FixtureSchema = new mongoose.Schema({
 
   stadium: {
     type: String,
-    required: true
+    required: true,
+    index: true
   },
-
+  home: {
+    type: String,
+    required: true,
+    index: true
+  },
+  away: {
+    type: String,
+    required: true,
+    index: true
+  },
   home_team: {
     type: mongoose.Types.ObjectId,
     ref: 'team',
@@ -104,22 +114,15 @@ FixtureSchema.statics = {
 
   async search(query) {
     try {
-      const formatedString = formatQuery(query);
-      const searchQueries = formatedString.split(' ');
-      let search = [];
       let fixtures = [];
-      for (let i = 0, length = searchQueries.length; i < length; i++) {
-        if (!searchQueries[i]) continue;
-        const pattern = new RegExp(searchQueries[i], 'gi');
-        let query = [
-          { date: { $regex: pattern } },
-          { time: { $regex: pattern } },
-          { status: { $regex: pattern } },
-          { home_team: { $regex: pattern } },
-          { away_team: { $regex: pattern } }
-        ];
-        search = search.concat(query);
-      }
+      let search = [
+        { time: { $regex: query } },
+        { status: { $regex: query } },
+        { stadium: { $regex: query } },
+        { home: { $regex: query } },
+        { away: { $regex: query } }
+      ];
+
       if (search.length) {
         fixtures = await this.find({
           $or: search

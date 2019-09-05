@@ -82,8 +82,11 @@ const TeamController = () => {
   };
 
   const searchTeam = async (req, res, next) => {
+    let query = Object.values(req.query)[0];
+    if (!query) return res.json(sendResponse(httpStatus.OK, 'Teams found', []));
+
     try {
-      const results = await Team.search(req.query.search);
+      const results = await Team.search(query);
 
       return res.json(sendResponse(httpStatus.OK, 'Teams found', results));
     } catch (error) {

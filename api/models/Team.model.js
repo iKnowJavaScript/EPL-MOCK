@@ -90,20 +90,13 @@ TeamSchema.statics = {
 
   async search(query) {
     try {
-      const formatedString = formatQuery(query);
-      const searchQueries = formatedString.split(' ');
-      let search = [];
       let teams = [];
-      for (let i = 0, length = searchQueries.length; i < length; i++) {
-        if (!searchQueries[i]) continue;
-        const pattern = new RegExp(searchQueries[i], 'gi');
-        let query = [
-          { name: { $regex: pattern } },
-          { coach: { $regex: pattern } },
-          { stadium: { $regex: pattern } }
-        ];
-        search = search.concat(query);
-      }
+      let search = [
+        { name: { $regex: query } },
+        { coach: { $regex: query } },
+        { stadium: { $regex: query } }
+      ];
+
       if (search.length) {
         teams = await this.find({
           $or: search

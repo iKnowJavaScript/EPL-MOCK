@@ -83,7 +83,7 @@ describe('Testing User routes', () => {
       expect(error).toBeDefined();
     });
   });
-  describe('Registered user should be able to sig in', () => {
+  describe('Registered user should be able to sign in', () => {
     it('Registered user should be able to log in', async () => {
       const register = await request(app)
         .post('/api/v1/auth/register')
@@ -108,6 +108,44 @@ describe('Testing User routes', () => {
       expect(message).toBeDefined();
       expect(error).toBe(false);
       expect(token).toBeDefined();
+    });
+  });
+  describe('Register user should be able to View COmpleted/Pending fixtures', () => {
+    it('Should be able to get all COMPLETED fixtures', async () => {
+      const register = await request(app)
+        .post('/api/v1/auth/register')
+        .send(user2);
+      registeredUser = register.body;
+
+      const response = await request(app)
+        .get('/api/v1/user/fixture/completed')
+        .set('Authorization', `Bearer ${registeredUser.token}`)
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      const { payload, message, statusCode, error } = response.body;
+      expect(payload).toBeDefined();
+      expect(statusCode).toBe(200);
+      expect(message).toMatch(/Fixtures found/i);
+      expect(error).toBeFalsy();
+    });
+    it('Should be able to get all PENDING fixtures', async () => {
+      const register = await request(app)
+        .post('/api/v1/auth/register')
+        .send(user2);
+      registeredUser = register.body;
+
+      const response = await request(app)
+        .get('/api/v1/user/fixture/pending')
+        .set('Authorization', `Bearer ${registeredUser.token}`)
+        .expect('Content-Type', /json/)
+        .expect(200);
+
+      const { payload, message, statusCode, error } = response.body;
+      expect(payload).toBeDefined();
+      expect(statusCode).toBe(200);
+      expect(message).toMatch(/Fixtures found/i);
+      expect(error).toBeFalsy();
     });
   });
 });
