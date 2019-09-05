@@ -50,6 +50,8 @@ exports.makeFixture = function(home, away) {
     home_team: home._id,
     away_team: away._id,
     stadium: 'San SIro',
-    status: 'Pending'
+    status: 'Pending',
+    home: home.name,
+    away: away.name
   };
 };
