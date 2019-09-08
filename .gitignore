@@ -10,6 +10,7 @@
 
 # production
 /build
+/try
 
 # misc
 .DS_Store

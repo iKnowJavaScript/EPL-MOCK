@@ -27,7 +27,10 @@ const envVarsSchema = Joi.object({
   CLIENT_SIDE_URL: Joi.string()
     .required()
     .description('Circa client-side URL'),
-  HASHING_SALT: Joi.string().description('JWT hashing')
+  HASHING_SALT: Joi.string().description('JWT hashing'),
+  REDIS_SECRET: Joi.string()
+    .required()
+    .description('JWT Secret required to sign')
 })
   .unknown()
   .required();
@@ -47,7 +50,8 @@ const config = {
     host: process.env.NODE_ENV === 'development' ? envVars.MONGO_HOST : envVars.MONGO_HOST_TEST,
     port: envVars.MONGO_PORT
   },
-  clientSideUrl: envVars.CLIENT_SIDE_URL
+  clientSideUrl: envVars.CLIENT_SIDE_URL,
+  REDIS_SECRET: envVars.REDIS_SECRET
 };
 
 module.exports = config;

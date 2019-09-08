@@ -86,6 +86,7 @@ const TeamController = () => {
   };
 
   const getPendingFixtures = async (req, res, next) => {
+    console.log(req.session);
     try {
       const results = await Fixture.getBy({ status: 'Pending' });
       return res.json(sendResponse(httpStatus.OK, 'Fixtures found', results));
@@ -95,6 +96,7 @@ const TeamController = () => {
   };
 
   const getCompletedFixtures = async (req, res, next) => {
+    console.log(req.session);
     try {
       const results = await Fixture.getBy({ status: 'Completed' });
       return res.json(sendResponse(httpStatus.OK, 'Fixtures found', results));
