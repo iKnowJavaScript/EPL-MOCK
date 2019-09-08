@@ -8,7 +8,7 @@ const app = require('./config/express');
 
 const server = http.Server(app);
 
-const debug = require('debug')('EPL-mock:index'); 
+const debug = require('debug')('EPL-mock:index');
 
 // make bluebird default Promise
 Promise = require('bluebird'); // eslint-disable-line no-global-assign
