@@ -31,15 +31,17 @@ exports.teams = {
     name: 'Arsenal',
     coach: 'Unai Emery',
     stadium: 'Emirate Stadium',
-    owner: 'Alisher Usmanov',
+    address: 'Emirate Stadium',
+    stadiumCapacity: `2233`,
     founded: '1886'
   },
   team2: {
     name: 'Chelsea',
     coach: 'Frank Lampard',
     stadium: 'Stanford Bridge',
-    owner: 'Roman Abramovic',
-    founded: '1896'
+    founded: '1896',
+    address: `Fulham Road SW6 1HS London`,
+    stadiumCapacity: '41841'
   }
 };
 
