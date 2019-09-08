@@ -115,17 +115,17 @@ FixtureSchema.statics = {
   async search(query) {
     try {
       let fixtures = [];
-      let search = [
-        { time: { $regex: query } },
-        { status: { $regex: query } },
-        { stadium: { $regex: query } },
-        { home: { $regex: query } },
-        { away: { $regex: query } }
+      let searchRegex = [
+        { time: { $regex: query, $options: 'i' } },
+        { status: { $regex: query, $options: 'i' } },
+        { stadium: { $regex: query, $options: 'i' } },
+        { home: { $regex: query, $options: 'i' } },
+        { away: { $regex: query, $options: 'i' } }
       ];
 
-      if (search.length) {
+      if (query) {
         fixtures = await this.find({
-          $or: search
+          $or: searchRegex
         })
           .populate({ path: 'home_team', select: 'name coach stadium' })
           .populate({ path: 'away_team', select: 'name coach' })
