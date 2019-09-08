@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const EncodeToken = require('../helpers/tokenEncoder');
+const EncodeToken = require('../helpers/TokenEncoder');
 const bcryptService = require('../services/bcrypt.service');
 const pick = require('ramda/src/pick');
 const httpStatus = require('http-status');
