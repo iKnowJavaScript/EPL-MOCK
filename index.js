@@ -13,7 +13,7 @@ const debug = require('debug')('EPL-mock:index');
 // make bluebird default Promise
 Promise = require('bluebird'); // eslint-disable-line no-global-assign
 
-const generatorWithFixture = require('./seed/index');
+const seedDatabase = require('./seed/index');
 // plugin bluebird promise in mongoose
 mongoose.Promise = Promise;
 
@@ -45,6 +45,6 @@ if (process.env.NODE_ENV !== 'test') {
   });
 }
 
-generatorWithFixture();
+seedDatabase();
 
 module.exports = server;

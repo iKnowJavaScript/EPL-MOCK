@@ -63,15 +63,15 @@ function handleDate(index) {
   return new Date(startDate + increment * index).toLocaleDateString();
 }
 
-module.exports = async function generatorWithFixture() {
+function generateRandom(arr) {
+  const random = Math.floor(Math.random() * Math.floor(arr.length));
+  return arr[random];
+}
+
+module.exports = async function seedDatabase() {
   await createTeams(teams);
   for (let index = 0; index < allSavedTeams.length; index++) {
     const team = allSavedTeams[index];
     await createFixture(team, allSavedTeams);
   }
 };
-
-function generateRandom(arr) {
-  const random = Math.floor(Math.random() * Math.floor(arr.length));
-  return arr[random];
-}
