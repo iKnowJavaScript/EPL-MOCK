@@ -34,7 +34,6 @@ async function createFixture(home_team, teams) {
     const formatedFixture = formatFixture(home_team, away_team, score, index);
     const save = await Fixture.create(formatedFixture);
     await save.save();
-    console.log(save);
     return acc;
   }, {});
 }
