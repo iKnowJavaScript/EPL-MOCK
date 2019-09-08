@@ -39,12 +39,12 @@ if (config.mongooseDebug) {
 
 //opens a port if the envirnoment is not test
 if (process.env.NODE_ENV !== 'test') {
+  // seed dataase
+  seedDatabase();
   // listen on port config.port
   server.listen(config.port, () => {
     console.info(`server started on port ${config.port} (${config.env})`); // eslint-disable-line no-console
   });
 }
-
-seedDatabase();
 
 module.exports = server;
