@@ -97,15 +97,15 @@ TeamSchema.statics = {
   async search(query) {
     try {
       let teams = [];
-      let search = [
-        { name: { $regex: query } },
-        { coach: { $regex: query } },
-        { stadium: { $regex: query } }
+      let searchRegex = [
+        { name: { $regex: query, $options: 'i' } },
+        { coach: { $regex: query, $options: 'i' } },
+        { stadium: { $regex: query, $options: 'i' } }
       ];
 
-      if (search.length) {
+      if (query) {
         teams = await this.find({
-          $or: search
+          $or: searchRegex
         });
       }
       return teams;
