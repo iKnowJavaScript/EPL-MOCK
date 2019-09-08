@@ -1,0 +1,13 @@
+docker build -t epl-mock .
+
+docker run -it epl-mock
+
+docker ps   // shows container that are currently running
+
+docker run -it -d epl-mock  //run the container underground
+
+docker xec -it container-hash bash //brings it back to the terminal
+
+docker stop container-hash  // to stop the container
+
+docker run -it -p 6060:6060epl-mock  // start docker at this port and bind local computer to it
