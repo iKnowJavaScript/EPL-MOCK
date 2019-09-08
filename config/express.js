@@ -1,4 +1,5 @@
 const express = require('express');
+require('dotenv').config();
 const logger = require('morgan');
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
@@ -10,7 +11,7 @@ const helmet = require('helmet');
 
 const session = require('express-session');
 const redis = require('redis');
-const redisClient = redis.createClient();
+const redisClient = redis.createClient(process.env.REDIS_URL);
 const redisStore = require('connect-redis')(session);
 
 const winstonInstance = require('./winston');
