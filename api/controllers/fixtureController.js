@@ -78,6 +78,9 @@ const TeamController = () => {
 
     try {
       const results = await Fixture.search(query);
+      if (results.length < 1) {
+        return res.json(sendResponse(httpStatus.NOT_FOUND, 'fixture not found', null));
+      }
 
       return res.json(sendResponse(httpStatus.OK, 'Fixtures found', results));
     } catch (error) {
@@ -88,6 +91,9 @@ const TeamController = () => {
   const getPendingFixtures = async (req, res, next) => {
     try {
       const results = await Fixture.getBy({ status: 'Pending' });
+      if (results.length < 1) {
+        return res.json(sendResponse(httpStatus.NOT_FOUND, 'fixture not found', null));
+      }
       return res.json(sendResponse(httpStatus.OK, 'Fixtures found', results));
     } catch (error) {
       next(error);
