@@ -53,7 +53,6 @@ const UserController = () => {
         sendResponse(200, 'Successfully logged in', user.transform(), false, accessToken)
       );
     } catch (error) {
-      console.log(error);
       next(error);
     }
   };

@@ -87,6 +87,9 @@ const TeamController = () => {
 
     try {
       const results = await Team.search(query);
+      if (results.length < 1) {
+        return res.json(sendResponse(httpStatus.NOT_FOUND, 'Teams found', null));
+      }
 
       return res.json(sendResponse(httpStatus.OK, 'Teams found', results));
     } catch (error) {
