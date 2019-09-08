@@ -6,18 +6,39 @@ const compress = require('compression');
 const methodOverride = require('method-override');
 const cors = require('cors');
 const expressWinston = require('express-winston');
-const passport = require('passport');
 const helmet = require('helmet');
+
+const session = require('express-session');
+const redis = require('redis');
+const redisClient = redis.createClient();
+const redisStore = require('connect-redis')(session);
+
 const winstonInstance = require('./winston');
 const routes = require('../api/routes');
-const strategies = require('./passport');
 const error = require('./error');
-const { env } = require('./env');
+const { env, REDIS_SECRET } = require('./env');
 
 const app = express();
+
+// start redis connect
+redisClient.on('error', err => {
+  console.log('Redis error: ', err);
+});
+
+app.use(
+  session({
+    secret: REDIS_SECRET,
+    name: 'epl_redis',
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false }, // Note that the cookie-parser module is no longer needed
+    store: new redisStore({ host: 'localhost', port: 6379, client: redisClient, ttl: 86400 })
+  })
+);
+
 // secure apps by setting various HTTP headers
 app.use(helmet());
-app.use(cors({ credentials: true, origin: true }))
+app.use(cors({ credentials: true, origin: true }));
 app.use(cookieParser());
 
 // parse body params and attach them to res.body
@@ -37,19 +58,10 @@ if (env === 'development') {
       winstonInstance,
       meta: true, // optional: log meta data about request (defaults to true)
       msg: 'HTTP {{req.method}} {{req.url}} {{res.statusCode}} {{res.responseTime}}ms',
-      colorStatus: true, // Color the status code (default green, 3XX cyan, 4XX yellow, 5XX red).
-    }),
+      colorStatus: true // Color the status code (default green, 3XX cyan, 4XX yellow, 5XX red).
+    })
   );
 }
-
-app.use(passport.initialize());
-app.use(passport.session());
-passport.use('jwt', strategies.jwt);
-app.use((req, res, next) => {
-  res.locals.user = req.user;
-  next();
-});
-
 
 // mount all routes on /api path
 app.use('/api/v1', routes);
@@ -63,10 +75,10 @@ app.use(error.notFound);
 if (env !== 'test') {
   app.use(
     expressWinston.errorLogger({
-      winstonInstance,
-    }),
+      winstonInstance
+    })
   );
-};
+}
 
 // error handler, send stacktrace only during development
 app.use(error.handler);
