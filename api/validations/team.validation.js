@@ -6,7 +6,9 @@ module.exports = {
       name: Joi.string().required(),
       coach: Joi.string().required(),
       stadium: Joi.string().required(),
-      owner: Joi.string(),
+      city: Joi.string(),
+      address: Joi.string(),
+      stadiumCapacity: Joi.string(),
       founded: Joi.string(),
       isDeleted: Joi.boolean()
     }
@@ -16,7 +18,9 @@ module.exports = {
       name: Joi.string(),
       coach: Joi.string(),
       stadium: Joi.string(),
-      owner: Joi.string(),
+      city: Joi.string(),
+      address: Joi.string(),
+      stadiumCapacity: Joi.string(),
       founded: Joi.string(),
       isDeleted: Joi.boolean()
     },

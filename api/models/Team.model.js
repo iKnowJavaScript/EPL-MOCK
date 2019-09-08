@@ -18,7 +18,6 @@ const TeamSchema = new mongoose.Schema({
     type: String,
     index: true,
     trim: true,
-    minlength: 2,
     maxlength: 150,
     required: true
   },
@@ -26,22 +25,29 @@ const TeamSchema = new mongoose.Schema({
     type: String,
     index: true,
     trim: true,
-    minlength: 2,
     maxlength: 150,
     required: true
   },
-  owner: {
+  address: {
     type: String,
     index: true,
     trim: true,
-    minlength: 2,
     maxlength: 150,
     default: ''
+  },
+  stadiumCapacity: {
+    type: String,
+    trim: true
   },
   founded: {
     type: String,
     trim: true,
-    minlength: 2,
+    maxlength: 150,
+    default: ''
+  },
+  city: {
+    type: String,
+    trim: true,
     maxlength: 150,
     default: ''
   },
