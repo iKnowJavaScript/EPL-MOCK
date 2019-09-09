@@ -11,3 +11,5 @@ docker xec -it container-hash bash //brings it back to the terminal
 docker stop container-hash  // to stop the container
 
 docker run -it -p 6060:6060epl-mock  // start docker at this port and bind local computer to it
+
+docker-compose up --build //build docker compose
