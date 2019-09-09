@@ -32,10 +32,11 @@ const UserController = () => {
           )
         );
       }
-
       const user = await User.create(req.body);
       const token = user.token();
 
+      // Set up redis session
+      req.session[user._id] = { token, email: user.email };
       return res.json(sendResponse(httpStatus.OK, 'success', user.transform(), null, token));
     } catch (err) {
       next(err);
@@ -45,12 +46,13 @@ const UserController = () => {
   const login = async (req, res, next) => {
     try {
       const { user, accessToken } = await User.loginAndGenerateToken(req.body);
+      // Set up redis session
+      req.session[user._id] = { token: accessToken, email: user.email };
 
       return res.json(
         sendResponse(200, 'Successfully logged in', user.transform(), false, accessToken)
       );
     } catch (error) {
-      console.log(error);
       next(error);
     }
   };

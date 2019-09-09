@@ -78,6 +78,9 @@ const TeamController = () => {
 
     try {
       const results = await Fixture.search(query);
+      if (results.length < 1) {
+        return res.json(sendResponse(httpStatus.OK, 'fixture not found', []));
+      }
 
       return res.json(sendResponse(httpStatus.OK, 'Fixtures found', results));
     } catch (error) {

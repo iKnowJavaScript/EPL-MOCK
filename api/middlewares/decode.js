@@ -11,6 +11,10 @@ module.exports = async (req, res, next) => {
     if (user) {
       req.sub = sub;
       req.user = user;
+      //handle session
+      // if (!req.session[sub]) {
+      //   return res.json(sendResponse(httpStatus.UNAUTHORIZED, 'Your session has expired', null));
+      // }
       return next();
     }
 

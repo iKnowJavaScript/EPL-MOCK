@@ -18,7 +18,6 @@ const TeamSchema = new mongoose.Schema({
     type: String,
     index: true,
     trim: true,
-    minlength: 2,
     maxlength: 150,
     required: true
   },
@@ -26,22 +25,29 @@ const TeamSchema = new mongoose.Schema({
     type: String,
     index: true,
     trim: true,
-    minlength: 2,
     maxlength: 150,
     required: true
   },
-  owner: {
+  address: {
     type: String,
     index: true,
     trim: true,
-    minlength: 2,
     maxlength: 150,
     default: ''
+  },
+  stadiumCapacity: {
+    type: String,
+    trim: true
   },
   founded: {
     type: String,
     trim: true,
-    minlength: 2,
+    maxlength: 150,
+    default: ''
+  },
+  city: {
+    type: String,
+    trim: true,
     maxlength: 150,
     default: ''
   },
@@ -91,15 +97,15 @@ TeamSchema.statics = {
   async search(query) {
     try {
       let teams = [];
-      let search = [
-        { name: { $regex: query } },
-        { coach: { $regex: query } },
-        { stadium: { $regex: query } }
+      let searchRegex = [
+        { name: { $regex: query, $options: 'i' } },
+        { coach: { $regex: query, $options: 'i' } },
+        { stadium: { $regex: query, $options: 'i' } }
       ];
 
-      if (search.length) {
+      if (query) {
         teams = await this.find({
-          $or: search
+          $or: searchRegex
         });
       }
       return teams;

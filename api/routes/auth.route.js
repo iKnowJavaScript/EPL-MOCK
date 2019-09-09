@@ -2,7 +2,6 @@ const express = require('express');
 const { celebrate: validate, errors } = require('celebrate');
 const paramValidation = require('../validations/user.validation');
 const userCtrl = require('../controllers/UserController');
-//const { profileImage } = require('../helpers/upload');
 const router = express.Router(); // eslint-disable-line new-cap
 
 /** POST /api/v1/user - creae a user */
