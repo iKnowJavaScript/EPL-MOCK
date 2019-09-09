@@ -1,0 +1,10 @@
+version: '2.1'
+
+services:
+  sterling-premier-league-mock:
+    image: sterling-premier-league-mock
+    build: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 6060:6060
